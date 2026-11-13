@@ -33,6 +33,41 @@ uv run mypy src/
 
 The CLI foundation is implemented. Screen observation, local inference, and Anki export are planned but not yet available.
 
+## Troubleshooting
+
+### `ModuleNotFoundError` when using uv on macOS
+
+On some macOS setups, Python may fail to import Honeydew even after successfully running `uv sync`.
+
+This can occur when macOS marks files inside `.venv` with the `hidden` filesystem flag. Python may consequently skip the `.pth` files used to make the project importable.
+
+**Symptoms:**
+
+- `uv sync` completes successfully.
+- `uv run honeydew --help` fails with `ModuleNotFoundError`.
+- `uv run pytest` fails to import `honeydew_learning`.
+
+**Workaround:**
+
+From the project root, run:
+
+```bash
+chflags -R nohidden .venv
+```
+
+Then verify:
+
+```bash
+uv run honeydew --help
+uv run pytest -v
+```
+
+You may need to repeat this workaround if the virtual environment is recreated or the hidden flags reappear.
+
+**Related issue:** [astral-sh/uv#16977](https://github.com/astral-sh/uv/issues/16977).
+
+This is an environment-level issue, not a problem with Honeydew's source code.
+
 ## License
 
 License to be determined.

@@ -5,6 +5,7 @@ from honeydew_learning.models import WindowInfo
 
 adapter = TypeAdapter(list[WindowInfo])
 
+
 def test_valid_window_json() -> None:
     sample_json = """
     [
@@ -22,6 +23,7 @@ def test_valid_window_json() -> None:
     assert windows[0].id == 19533
     assert windows[0].application == "ChatGPT"
     assert windows[0].bundleID == "com.openai.codex"
+
 
 def test_missing_bundle_id() -> None:
     sample_json = """
@@ -63,7 +65,3 @@ def test_negative_window_id() -> None:
 
     with pytest.raises(ValidationError):
         adapter.validate_json(sample_json)
-
-
-
-

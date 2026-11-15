@@ -11,16 +11,16 @@ def test_missing_swift(monkeypatch: MonkeyPatch) -> None:
         if command == "swift":
             return None
         return f"/usr/bin/{command}"
-    
+
     monkeypatch.setattr(
-            shutil,
-            "which",
-            fake_which,
+        shutil,
+        "which",
+        fake_which,
     )
 
     results = diagnostics.run_diagnostics()
 
-    swift =  next( result for result in results if result.name == "Swift compiler")
+    swift = next(result for result in results if result.name == "Swift compiler")
 
     assert swift.status == DiagnosticStatus.WARN
 
@@ -29,7 +29,7 @@ def test_mising_ollama(monkeypatch: MonkeyPatch) -> None:
     def fake_which(command: str) -> str | None:
         if command == "ollama":
             return None
-        return f"/usr/bin/{command}" 
+        return f"/usr/bin/{command}"
 
     monkeypatch.setattr(shutil, "which", fake_which)
 
@@ -39,4 +39,3 @@ def test_mising_ollama(monkeypatch: MonkeyPatch) -> None:
 
     assert ollama.status == DiagnosticStatus.WARN
     assert ollama.detail == "Ollama not found"
-
